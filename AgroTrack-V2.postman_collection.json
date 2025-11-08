@@ -1,0 +1,206 @@
+{
+	"info": {
+		"_postman_id": "agrotrack-v2-2025",
+		"name": "AgroTrack V2.0 - API",
+		"description": "Colección de pruebas para la API REST de AgroTrack V2.0\n\nAutor: Silvano Puccini\nMateria: Programación Web II",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Health Check",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:3000/health",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"health"
+					]
+				},
+				"description": "Verifica que el servidor esté funcionando correctamente.\n\nDebería devolver: { \"status\": \"ok\" }"
+			},
+			"response": []
+		},
+		{
+			"name": "Listar Todos los Contactos",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:3000/api/contactos",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"api",
+						"contactos"
+					]
+				},
+				"description": "Obtiene la lista completa de contactos registrados en el sistema.\n\nRetorna un array con todos los contactos ordenados por fecha (más recientes primero)."
+			},
+			"response": []
+		},
+		{
+			"name": "Crear Contacto - Exitoso",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"nombre\": \"Carlos Rodríguez\",\n    \"email\": \"carlos@agrotrack.com\",\n    \"telefono\": \"3512345678\",\n    \"mensaje\": \"Consulta sobre implementación de sistema de riego inteligente\"\n}"
+				},
+				"url": {
+					"raw": "http://localhost:3000/api/contactos",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"api",
+						"contactos"
+					]
+				},
+				"description": "Crea un nuevo contacto con todos los campos válidos.\n\nTodos los campos son obligatorios:\n- nombre\n- email (debe tener formato válido)\n- telefono\n- mensaje"
+			},
+			"response": []
+		},
+		{
+			"name": "Crear Contacto - Error: Campos Incompletos",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"nombre\": \"Juan Pérez\",\n    \"email\": \"juan@example.com\"\n}"
+				},
+				"url": {
+					"raw": "http://localhost:3000/api/contactos",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"api",
+						"contactos"
+					]
+				},
+				"description": "Intenta crear un contacto sin todos los campos requeridos.\n\nDebería devolver error 400 con mensaje:\n\"Todos los campos son obligatorios (nombre, email, telefono, mensaje)\""
+			},
+			"response": []
+		},
+		{
+			"name": "Crear Contacto - Error: Email Inválido",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"nombre\": \"María López\",\n    \"email\": \"email_invalido\",\n    \"telefono\": \"1234567890\",\n    \"mensaje\": \"Esto debería fallar por email inválido\"\n}"
+				},
+				"url": {
+					"raw": "http://localhost:3000/api/contactos",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"api",
+						"contactos"
+					]
+				},
+				"description": "Intenta crear un contacto con formato de email inválido.\n\nDebería devolver error 400 con mensaje:\n\"El formato del email no es válido\""
+			},
+			"response": []
+		},
+		{
+			"name": "Crear Contacto - Caso de Uso Real 1",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"nombre\": \"Laura Fernández\",\n    \"email\": \"laura.fernandez@campo.com\",\n    \"telefono\": \"3516789012\",\n    \"mensaje\": \"Necesito información sobre análisis de suelo para cultivo de soja. Tengo 50 hectáreas en zona rural.\"\n}"
+				},
+				"url": {
+					"raw": "http://localhost:3000/api/contactos",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"api",
+						"contactos"
+					]
+				},
+				"description": "Caso de uso real: Consulta sobre análisis de suelo."
+			},
+			"response": []
+		},
+		{
+			"name": "Crear Contacto - Caso de Uso Real 2",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"nombre\": \"Roberto Martínez\",\n    \"email\": \"r.martinez@agro.com.ar\",\n    \"telefono\": \"2214567890\",\n    \"mensaje\": \"Quisiera solicitar presupuesto para sistema de monitoreo de cultivos con drones. Zona: Buenos Aires.\"\n}"
+				},
+				"url": {
+					"raw": "http://localhost:3000/api/contactos",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"api",
+						"contactos"
+					]
+				},
+				"description": "Caso de uso real: Solicitud de presupuesto para monitoreo con drones."
+			},
+			"response": []
+		}
+	]
+}

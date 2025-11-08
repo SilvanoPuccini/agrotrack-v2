@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Nuevo Contacto - AgroTrack V2.0</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <header>
+      <h1>🌾 AgroTrack V2.0</h1>
+      <p>Registrar Nuevo Contacto</p>
+    </header>
+
+    <div class="container">
+      <a href="index.html" class="btn-volver">← Volver al inicio</a>
+
+      <h1>📝 Formulario de Contacto</h1>
+
+      <div id="mensajeResultado"></div>
+
+      <form id="formContacto">
+        <label for="nombre">Nombre Completo *</label>
+        <input
+          type="text"
+          id="nombre"
+          name="nombre"
+          autocomplete="name"
+          required
+          placeholder="Ej: Juan Pérez"
+        />
+
+        <label for="email">Correo Electrónico *</label>
+        <input
+          type="email"
+          id="email"
+          name="email"
+          autocomplete="email"
+          required
+          placeholder="Ej: juan@example.com"
+        />
+
+        <label for="telefono">Teléfono *</label>
+        <input
+          type="tel"
+          id="telefono"
+          name="telefono"
+          autocomplete="tel"
+          required
+          placeholder="Ej: 1234567890"
+        />
+
+        <label for="mensajeTexto">Mensaje o Consulta *</label>
+        <textarea
+          id="mensajeTexto"
+          name="mensaje"
+          required
+          placeholder="Escriba su consulta aquí..."
+        ></textarea>
+
+        <button type="submit">✓ Enviar Contacto</button>
+      </form>
+    </div>
+
+    <script>
+      const form = document.getElementById("formContacto");
+      const mensajeDiv = document.getElementById("mensajeResultado");
+
+      form.addEventListener("submit", async (e) => {
+        e.preventDefault();
+
+        // Obtener datos del formulario
+        const datos = {
+          nombre: document.getElementById("nombre").value.trim(),
+          email: document.getElementById("email").value.trim(),
+          telefono: document.getElementById("telefono").value.trim(),
+          mensaje: document.getElementById("mensajeTexto").value.trim(),
+        };
+
+        // Validar que no estén vacíos
+        if (
+          !datos.nombre ||
+          !datos.email ||
+          !datos.telefono ||
+          !datos.mensaje
+        ) {
+          mensajeDiv.innerHTML = `
+                    <div class="mensaje error">
+                        ✗ Todos los campos son obligatorios
+                    </div>
+                `;
+          mensajeDiv.scrollIntoView({ behavior: "smooth" });
+          return;
+        }
+
+        try {
+          // Enviar datos a la API
+          const response = await fetch("/api/contactos", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify(datos),
+          });
+
+          const resultado = await response.json();
+
+          if (response.ok && !resultado.error) {
+            // Éxito
+            mensajeDiv.innerHTML = `
+                        <div class="mensaje exito">
+                            ✓ ${
+                              resultado.mensaje ||
+                              "Contacto registrado exitosamente"
+                            }
+                        </div>
+                    `;
+            form.reset();
+
+            // Redirigir después de 2 segundos
+            setTimeout(() => {
+              window.location.href = "listado.html";
+            }, 2000);
+          } else {
+            // Error
+            mensajeDiv.innerHTML = `
+                        <div class="mensaje error">
+                            ✗ ${
+                              resultado.mensaje ||
+                              "Error al registrar el contacto"
+                            }
+                        </div>
+                    `;
+          }
+        } catch (error) {
+          mensajeDiv.innerHTML = `
+                    <div class="mensaje error">
+                        ✗ Error de conexión: ${error.message}
+                    </div>
+                `;
+        }
+
+        // Scroll al mensaje
+        mensajeDiv.scrollIntoView({ behavior: "smooth" });
+      });
+    </script>
+  </body>
+</html>

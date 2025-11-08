@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lista de Contactos - AgroTrack V2.0</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <header>
+        <h1>🌾 AgroTrack V2.0</h1>
+        <p>Lista de Contactos Registrados</p>
+    </header>
+
+    <div class="container">
+        <a href="index.html" class="btn-volver">← Volver al inicio</a>
+        
+        <h1>📋 Contactos Registrados</h1>
+
+        <div id="mensaje"></div>
+        <div id="loading" class="loading">Cargando contactos...</div>
+        <div id="contactos" class="contactos-grid"></div>
+        <div id="contador" class="contador"></div>
+    </div>
+
+    <script>
+        const loadingDiv = document.getElementById('loading');
+        const contactosDiv = document.getElementById('contactos');
+        const contadorDiv = document.getElementById('contador');
+        const mensajeDiv = document.getElementById('mensaje');
+
+        // Cargar contactos al cargar la página
+        window.addEventListener('DOMContentLoaded', cargarContactos);
+
+        async function cargarContactos() {
+            try {
+                const response = await fetch('/api/contactos');
+                const resultado = await response.json();
+
+                loadingDiv.style.display = 'none';
+
+                if (response.ok && !resultado.error) {
+                    const contactos = resultado.datos;
+
+                    if (contactos.length === 0) {
+                        contactosDiv.innerHTML = `
+                            <div class="mensaje">
+                                No hay contactos registrados aún.
+                            </div>
+                        `;
+                        return;
+                    }
+
+                    // Mostrar contactos
+                    contactosDiv.innerHTML = contactos.map(contacto => {
+                        const fecha = new Date(contacto.created_at).toLocaleString('es-ES', {
+                            year: 'numeric',
+                            month: 'long',
+                            day: 'numeric',
+                            hour: '2-digit',
+                            minute: '2-digit'
+                        });
+
+                        return `
+                            <div class="contacto-card">
+                                <h3>${contacto.nombre}</h3>
+                                <p><strong>📧 Email:</strong> ${contacto.email}</p>
+                                <p><strong>📞 Teléfono:</strong> ${contacto.telefono}</p>
+                                <p><strong>💬 Mensaje:</strong> ${contacto.mensaje}</p>
+                                <p class="fecha">📅 Registrado: ${fecha}</p>
+                            </div>
+                        `;
+                    }).join('');
+
+                    // Mostrar contador
+                    contadorDiv.innerHTML = `
+                        Total de contactos: <strong>${contactos.length}</strong>
+                    `;
+                } else {
+                    mensajeDiv.innerHTML = `
+                        <div class="mensaje error">
+                            ✗ ${resultado.mensaje || 'Error al cargar contactos'}
+                        </div>
+                    `;
+                }
+            } catch (error) {
+                loadingDiv.style.display = 'none';
+                mensajeDiv.innerHTML = `
+                    <div class="mensaje error">
+                        ✗ Error de conexión: ${error.message}
+                    </div>
+                `;
+            }
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,21 @@
+# Variables de entorno
+.env
+
+# Dependencias
+node_modules/
+
+# Logs
+*.log
+npm-debug.log*
+
+# Sistema operativo
+.DS_Store
+Thumbs.db
+
+# IDE
+.vscode/
+.idea/
+
+# Temporal
+*.tmp
+*.bak

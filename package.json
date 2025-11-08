@@ -1,0 +1,22 @@
+{
+  "name": "agrotrack-v2",
+  "version": "1.0.0",
+  "description": "Sistema de gestión de contactos AgroTrack",
+  "main": "app.js",
+  "scripts": {
+	"start": "node app.js",
+    	"dev": "nodemon app.js"
+  },
+  "keywords": ["express", "mysql", "api"],
+  "author": "Silvano Puccini",
+  "license": "ISC",
+  "type": "commonjs",
+  "dependencies": {
+    "dotenv": "^17.2.3",
+    "express": "^5.1.0",
+    "mysql": "^2.18.1"
+  },
+  "devDependencies": {
+    "nodemon": "^3.1.10"
+  }
+}
