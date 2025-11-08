@@ -65,7 +65,7 @@ agrotrack-v2/
 
 ### **1. Clonar el repositorio:**
 ```bash
-git clone https://github.com/TU_USUARIO/agrotrack-v2.git
+git clone https://github.com/SilvanoPuccini/agrotrack-v2.git
 cd agrotrack-v2
 ```
 
